@@ -2,9 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:protocol_app/pages/detail_page.dart';
 import 'package:protocol_app/pages/login_page.dart';
 import 'package:protocol_app/pages/main_page.dart';
-import 'pages/home_page.dart';
-import 'pages/about_page.dart';
-import 'pages/contact_page.dart';
+import 'package:protocol_app/pages/participant_page.dart';
+import 'pages/event_page.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -19,9 +18,9 @@ class AppRouter {
             builder: (context, state) => const LoginPage(),
           ),
           GoRoute(
-            path: '/home',
-            name: 'home',
-            builder: (context, state) => const HomePage(),
+            path: '/event',
+            name: 'event',
+            builder: (context, state) => const EventPage(),
             routes: [
               GoRoute(
                 path: 'detail/:id',
@@ -34,14 +33,9 @@ class AppRouter {
             ],
           ),
           GoRoute(
-            path: '/about',
-            name: 'about',
-            builder: (context, state) => const AboutPage(),
-          ),
-          GoRoute(
-            path: '/contact',
-            name: 'contact',
-            builder: (context, state) => const ContactPage(),
+            path: '/participants',
+            name: 'participants',
+            builder: (context, state) => const ParticipantPage(),
           ),
         ],
       ),

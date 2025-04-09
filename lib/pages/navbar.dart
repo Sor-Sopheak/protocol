@@ -30,6 +30,17 @@ class _NavbarState extends State<Navbar> {
       automaticallyImplyLeading: false,
       title: Row(
         children: [
+          const MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Text(
+              'ពិធីការ',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(width: 50),
           Expanded(
             child: Row(
               children: List.generate(
@@ -40,7 +51,7 @@ class _NavbarState extends State<Navbar> {
                     onEnter: (_) => setState(() => _isHovered[index] = true),
                     onExit: (_) => setState(() => _isHovered[index] = false),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
                         color: widget.currentIndex == index
                             ? Colors.black
@@ -49,6 +60,8 @@ class _NavbarState extends State<Navbar> {
                       child: TextButton(
                         onPressed: () => widget.onSelectedRoute(index),
                         style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           foregroundColor: widget.currentIndex == index ||
                                   (_isHovered[index] ?? false)
                               ? Colors.white
@@ -69,56 +82,145 @@ class _NavbarState extends State<Navbar> {
               ),
             ),
           ),
-          Row(
+        ],
+      ),
+      actions: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(width: 16),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {},
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      MenuAnchor(
-                        builder: (BuildContext context,
-                            MenuController controller, Widget? child) {
-                          return IconButton(
-                            icon: Image.asset(
-                              'assets/icons/cambodia_flag.png',
-                              width: 32,
-                              height: 24,
-                            ),
-                            onPressed: () {
-                              if (controller.isOpen) {
-                                controller.close();
-                              } else {
-                                controller.open();
-                              }
-                              setState(() {});
-                            },
-                          );
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    width: 36,
+                    height: 36,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: Image.asset(
+                      'assets/images/img_placeholder.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  MenuAnchor(
+                    builder: (BuildContext context, MenuController controller,
+                        Widget? child) {
+                      return IconButton(
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          size: 24,
+                        ),
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                          setState(() {});
                         },
-                        childFocusNode: _buttonFocusNode,
-                        menuChildren: <Widget>[
-                          Column(
-                            children: [
-                              MenuItemButton(
-                                child: const Text('Khmer'),
-                                onPressed: () => {},
-                              ),
-                            ],
+                      );
+                    },
+                    childFocusNode: _buttonFocusNode,
+                    menuChildren: <Widget>[
+                      Column(
+                        children: [
+                          MenuItemButton(
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/images/img_placeholder.png',
+                                  width: 24,
+                                  height: 24,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text('Username'),
+                              ],
+                            ),
+                            onPressed: () => {},
+                          ),
+                          MenuItemButton(
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/icons/info.png',
+                                  width: 24,
+                                  height: 24,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text('Logout'),
+                              ],
+                            ),
+                            onPressed: () => {},
                           ),
                         ],
                       ),
                     ],
                   ),
+                ],
+              ),
+              const SizedBox(width: 10),
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1,
+                        strokeAlign: BorderSide.strokeAlignInside,
+                      ),
+                    ),
+                    child: MenuAnchor(
+                      builder: (BuildContext context, MenuController controller,
+                          Widget? child) {
+                        return IconButton(
+                          icon: Image.asset(
+                            'assets/icons/cambodia_flag.png',
+                            width: 32,
+                            height: 24,
+                          ),
+                          onPressed: () {
+                            if (controller.isOpen) {
+                              controller.close();
+                            } else {
+                              controller.open();
+                            }
+                            setState(() {});
+                          },
+                        );
+                      },
+                      childFocusNode: _buttonFocusNode,
+                      menuChildren: <Widget>[
+                        Column(
+                          children: [
+                            MenuItemButton(
+                              child: const Text('Khmer'),
+                              onPressed: () => {},
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
