@@ -6,7 +6,8 @@ enum TextFieldTypeEnum {
   number,
   email,
   password,
-  datetime,
+  date,
+  time,
   file,
   dropdown,
 }
@@ -24,7 +25,9 @@ extension TextFieldTypeEnumExtensio on TextFieldTypeEnum {
         return TextInputType.emailAddress;
       case TextFieldTypeEnum.password:
         return TextInputType.visiblePassword;
-      case TextFieldTypeEnum.datetime:
+      case TextFieldTypeEnum.date:
+        return TextInputType.datetime;
+      case TextFieldTypeEnum.time:
         return TextInputType.datetime;
       case TextFieldTypeEnum.file:
         return TextInputType.text;

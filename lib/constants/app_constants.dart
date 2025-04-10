@@ -5,3 +5,12 @@ final navItems = [
   const DestinationRouteModel('Event List', '/event'),
   const DestinationRouteModel('Participants List', '/participants')
 ];
+
+final onboardingOption = ['View Detail', 'Edit'];
+
+final priorityOption = [
+  'Low',
+  'Normal',
+  'High',
+  'Immediate'
+];

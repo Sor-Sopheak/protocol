@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:protocol_app/models/text_field_type_enum.dart';
 
-class StandardInputFieldWidget extends StatelessWidget {
+class InputFieldWidget extends StatelessWidget {
   final TextEditingController controller;
   final TextFieldTypeEnum inputType;
   final String placeholder;
@@ -11,7 +11,9 @@ class StandardInputFieldWidget extends StatelessWidget {
   final Function(String)? onChanged;
   final bool obscureText;
   final VoidCallback? toggleObscure;
-  const StandardInputFieldWidget({
+  final int? maxline;
+  final int? maxLength;
+  const InputFieldWidget({
     super.key,
     required this.controller,
     required this.inputType,
@@ -22,6 +24,8 @@ class StandardInputFieldWidget extends StatelessWidget {
     this.onChanged,
     this.obscureText = false,
     this.toggleObscure,
+    this.maxline = 1,
+    this.maxLength,
   });
 
   @override
@@ -34,6 +38,8 @@ class StandardInputFieldWidget extends StatelessWidget {
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       obscureText: obscureText,
+      maxLines: maxline,
+      maxLength: maxLength,
       decoration: InputDecoration(
         hintText: placeholder,
         border: const OutlineInputBorder(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:protocol_app/models/text_field_type_enum.dart';
-import 'package:protocol_app/widgets/input_field_with_label_widget.dart';
+import 'package:protocol_app/utilities/text_field_validator.dart';
+import 'package:protocol_app/widgets/standard_field_with_label_widget.dart';
 import 'package:protocol_app/widgets/text_button_widget.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,6 +15,8 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passWordController = TextEditingController();
+  TextEditingController _startTimeController = TextEditingController();
+  TextEditingController _endTimeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -75,18 +78,48 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(
                         height: 22,
                       ),
-                      InputFieldWithLabelWidget(
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: StandardFieldWithLabelWidget(
+                              controller: _startTimeController,
+                              label: 'Email',
+                              placeholder: 'example@gov.kh',
+                              isOptional: false,
+                              inputType: TextFieldTypeEnum.time,
+                              isStartTime: true,
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Text('To'),
+                            ),
+                          Flexible(
+                            child: StandardFieldWithLabelWidget(
+                              controller: _endTimeController,
+                              label: 'Email',
+                              placeholder: 'example@gov.kh',
+                              isOptional: false,
+                              inputType: TextFieldTypeEnum.time,
+                              isStartTime: false,
+                            ),
+                          ),
+                        ],
+                      ),
+                      StandardFieldWithLabelWidget(
                         controller: _emailController,
                         label: 'Email',
                         placeholder: 'example@gov.kh',
                         isOptional: false,
                         inputType: TextFieldTypeEnum.email,
-                        iconPath: 'assets/icons/info.png',
+                        validator: TextFieldValidator.emailValidator,
                       ),
                       const SizedBox(
                         height: 8,
                       ),
-                      InputFieldWithLabelWidget(
+                      StandardFieldWithLabelWidget(
                         controller: _passWordController,
                         label: 'Password',
                         placeholder: 'Enter your password',

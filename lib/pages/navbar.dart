@@ -85,97 +85,95 @@ class _NavbarState extends State<Navbar> {
         ],
       ),
       actions: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 16),
-                    width: 36,
-                    height: 36,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset(
-                      'assets/images/img_placeholder.png',
-                      fit: BoxFit.cover,
-                    ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    'assets/images/img_placeholder.png',
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  MenuAnchor(
-                    builder: (BuildContext context, MenuController controller,
-                        Widget? child) {
-                      return IconButton(
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          size: 24,
-                        ),
-                        onPressed: () {
-                          if (controller.isOpen) {
-                            controller.close();
-                          } else {
-                            controller.open();
-                          }
-                          setState(() {});
-                        },
-                      );
-                    },
-                    childFocusNode: _buttonFocusNode,
-                    menuChildren: <Widget>[
-                      Column(
-                        children: [
-                          MenuItemButton(
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/images/img_placeholder.png',
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                const SizedBox(width: 8),
-                                const Text('Username'),
-                              ],
-                            ),
-                            onPressed: () => {},
-                          ),
-                          MenuItemButton(
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/icons/info.png',
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                const SizedBox(width: 8),
-                                const Text('Logout'),
-                              ],
-                            ),
-                            onPressed: () => {},
-                          ),
-                        ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                MenuAnchor(
+                  builder: (BuildContext context, MenuController controller,
+                      Widget? child) {
+                    return IconButton(
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: 24,
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(width: 10),
-              MouseRegion(
+                      onPressed: () {
+                        if (controller.isOpen) {
+                          controller.close();
+                        } else {
+                          controller.open();
+                        }
+                        setState(() {});
+                      },
+                    );
+                  },
+                  childFocusNode: _buttonFocusNode,
+                  menuChildren: <Widget>[
+                    Column(
+                      children: [
+                        MenuItemButton(
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/img_placeholder.png',
+                                width: 24,
+                                height: 24,
+                              ),
+                              const SizedBox(width: 8),
+                              const Text('Username'),
+                            ],
+                          ),
+                          onPressed: () => {},
+                        ),
+                        MenuItemButton(
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/icons/info.png',
+                                width: 24,
+                                height: 24,
+                              ),
+                              const SizedBox(width: 8),
+                              const Text('Logout'),
+                            ],
+                          ),
+                          onPressed: () => {},
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {},
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Colors.black,
@@ -217,8 +215,8 @@ class _NavbarState extends State<Navbar> {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );
