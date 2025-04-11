@@ -23,7 +23,7 @@ class TextTabButtonWidget extends StatelessWidget {
     return TextButton(
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all(
-            isActive ? Colors.blue.shade200 : Colors.transparent),
+            isActive ? Colors.grey.shade200 : Colors.transparent),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.zero,

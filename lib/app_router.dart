@@ -14,23 +14,23 @@ class AppRouter {
         routes: [
           GoRoute(
             path: '/',
-            name: 'login',
-            builder: (context, state) => const LoginPage(),
-          ),
-          GoRoute(
-            path: '/event',
             name: 'event',
             builder: (context, state) => const EventPage(),
-            routes: [
-              GoRoute(
-                path: 'detail/:id',
-                name: 'detail',
-                builder: (context, state) {
-                  final id = state.pathParameters['id']!;
-                  return DetailPage(id: id);
-                },
-              ),
-            ],
+          ),
+          GoRoute(
+            path: '/login',
+            name: 'login',
+            builder: (context, state) => const LoginPage(),
+            // routes: [
+            //   GoRoute(
+            //     path: 'detail/:id',
+            //     name: 'detail',
+            //     builder: (context, state) {
+            //       final id = state.pathParameters['id']!;
+            //       return DetailPage(id: id);
+            //     },
+            //   ),
+            // ],
           ),
           GoRoute(
             path: '/participants',

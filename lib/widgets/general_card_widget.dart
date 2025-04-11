@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:protocol_app/widgets/rich_text_widget.dart';
+import 'package:protocol_app/widgets/text_status_widget.dart';
 
 class GeneralCardWidget extends StatelessWidget {
   const GeneralCardWidget({super.key});
@@ -36,54 +38,24 @@ class GeneralCardWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            RichText(
-              text: TextSpan(
-                text: '1.',
-                style: DefaultTextStyle.of(context).style,
-                children: const <TextSpan>[
-                  TextSpan(
-                    text:
-                        'ជំនួបសំណេះសំណាលជាមួយក្រុមហ៊ុនទូរសព្ទចល័ត ក្រុមហ៊ុនបង្គោលអង់តែន និងក្រុមហ៊ុនបណ្តាញខ្សែកាបអុបទិកនៅកម្ពុជា',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            const RichTextWidget(
+              text: '1. ',
+              textSpan:
+                  'ជំនួបសំណេះសំណាលជាមួយក្រុមហ៊ុនទូរសព្ទចល័ត ក្រុមហ៊ុនបង្គោលអង់តែន និងក្រុមហ៊ុនបណ្តាញខ្សែកាបអុបទិកនៅកម្ពុជា',
             ),
             const Divider(
               thickness: 1,
               color: Colors.black,
             ),
-            RichText(
-              text: TextSpan(
-                text: 'Start date & Time: ',
-                style: DefaultTextStyle.of(context).style,
-                children: const <TextSpan>[
-                  TextSpan(
-                    text: 'Tue, Mar 01, 2025 9:30 AM',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            const RichTextWidget(
+              text: 'Start date & Time: ',
+              textSpan: 'Tue, Mar 01, 2025 9:30 AM',
             ),
             const SizedBox(height: 16),
-            RichText(
-              text: TextSpan(
-                text: 'Location: ',
-                style: DefaultTextStyle.of(context).style,
-                children: const <TextSpan>[
-                  TextSpan(
-                    text:
-                        'Innovation Center នៃបណ្ឌិត្យសភាបច្ចេកវិទ្យាឌីជីថលកម្ពុជា CADT',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            const RichTextWidget(
+              text: 'Location: ',
+              textSpan:
+                  'Innovation Center នៃបណ្ឌិត្យសភាបច្ចេកវិទ្យាឌីជីថលកម្ពុជា CADT',
             ),
             const SizedBox(height: 16),
             Row(
@@ -98,55 +70,19 @@ class GeneralCardWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(width: 16),
-                Row(
-                  children: [
-                    Container(
-                      width: 10,
-                      height: 10,
-                      margin: const EdgeInsets.only(right: 4),
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.black)),
-                    ),
-                    const Text(
-                      '4 Waiting for Confirmation',
-                    ),
-                  ],
+                const TextStatusWidget(
+                  count: 3,
+                  statusTitle: 'Waiting for Confirmation',
                 ),
                 const SizedBox(width: 16),
-                Row(
-                  children: [
-                    Container(
-                      width: 10,
-                      height: 10,
-                      margin: const EdgeInsets.only(right: 4),
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.black)),
-                    ),
-                    const Text(
-                      '4 Waiting for Confirmation',
-                    ),
-                  ],
+                const TextStatusWidget(
+                  count: 1,
+                  statusTitle: 'Comfirmation',
                 ),
                 const SizedBox(width: 16),
-                Row(
-                  children: [
-                    Container(
-                      width: 10,
-                      height: 10,
-                      margin: const EdgeInsets.only(right: 4),
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.black)),
-                    ),
-                    const Text(
-                      '4 Waiting for Confirmation',
-                    ),
-                  ],
+                const TextStatusWidget(
+                  count: 1,
+                  statusTitle: 'Not Attending',
                 ),
               ],
             )

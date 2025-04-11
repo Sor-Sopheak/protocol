@@ -122,7 +122,6 @@ class _StandardFieldWithLabelWidgetState
                     content:
                         Text('End time cannot be earlier than start time.')),
               );
-              print('End time cannot be earlier than start time.');
               return;
             }
           }
@@ -154,7 +153,7 @@ class _StandardFieldWithLabelWidgetState
       if (result != null && result.files.isNotEmpty) {
         setState(() {
           _pickedFiles = result.files;
-          _fileErrorMessage = ''; // Clear any previous error
+          _fileErrorMessage = '';
         });
         _validateFilesSize();
       }

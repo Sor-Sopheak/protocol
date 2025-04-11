@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:protocol_app/widgets/file_upload_preview_widget.dart';
 import 'package:protocol_app/widgets/general_card_widget.dart';
+import 'package:protocol_app/widgets/page_header_widget.dart';
 import 'package:protocol_app/widgets/text_tab_button_widget.dart';
 
 class EventPage extends StatelessWidget {
@@ -9,30 +10,38 @@ class EventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int currentTabIndex = 0;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _fileController = TextEditingController();
 
-    return Column(
-      children: [
-        Center(
-          child: ElevatedButton(
-            onPressed: () {
-              context.pushNamed('detail', pathParameters: {'id': '123'});
-            },
-            child: const Text('Go to Details'),
-          ),
-        ),
-        Container(
-          decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.black)),
-          ),
-          child: Row(
-            children: generateTabButtons(
-              currentTabIndex,
-              (buttonIndex) {},
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          const PageHeaderWidget(title: 'Event List', isExport: true, btnTitle: 'Export'),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(bottom: BorderSide(color: Colors.black)),
+            ),
+            child: Row(
+              children: generateTabButtons(
+                currentTabIndex,
+                (buttonIndex) {
+                },
+              ),
             ),
           ),
-        ),
-        GeneralCardWidget(),
-      ],
+          const GeneralCardWidget(),
+
+          SizedBox(
+            width: 500,
+            height: 300,
+            child: Form(
+              key: _formKey,
+              child: FileUploadPreviewWidget(), 
+            ),
+          )
+        ],
+      ),
     );
   }
 
