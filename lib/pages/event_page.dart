@@ -15,32 +15,27 @@ class EventPage extends StatelessWidget {
 
     return Container(
       color: Colors.white,
-      child: Column(
-        children: [
-          const PageHeaderWidget(title: 'Event List', isExport: true, btnTitle: 'Export'),
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.black)),
-            ),
-            child: Row(
-              children: generateTabButtons(
-                currentTabIndex,
-                (buttonIndex) {
-                },
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const PageHeaderWidget(title: 'Event List', isExport: true, btnTitle: 'Export'),
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.black)),
+              ),
+              child: Row(
+                children: generateTabButtons(
+                  currentTabIndex,
+                  (buttonIndex) {
+                  },
+                ),
               ),
             ),
-          ),
-          const GeneralCardWidget(),
-
-          SizedBox(
-            width: 500,
-            height: 300,
-            child: Form(
-              key: _formKey,
-              child: FileUploadPreviewWidget(), 
-            ),
-          )
-        ],
+            const GeneralCardWidget(),
+        
+            FileUploadPreviewWidget(), 
+          ],
+        ),
       ),
     );
   }
