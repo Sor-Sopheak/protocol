@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:protocol_app/models/text_field_type_enum.dart';
 import 'package:protocol_app/utilities/text_field_validator.dart';
 import 'package:protocol_app/widgets/standard_field_with_label_widget.dart';
@@ -15,8 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passWordController = TextEditingController();
-  TextEditingController _startTimeController = TextEditingController();
-  TextEditingController _endTimeController = TextEditingController();
+  // TextEditingController _startTimeController = TextEditingController();
+  // TextEditingController _endTimeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -78,36 +79,36 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(
                         height: 22,
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: StandardFieldWithLabelWidget(
-                              controller: _startTimeController,
-                              label: 'Email',
-                              placeholder: 'example@gov.kh',
-                              isOptional: false,
-                              inputType: TextFieldTypeEnum.time,
-                              isStartTime: true,
-                            ),
-                          ),
-                          const Padding(
-                              padding: EdgeInsets.all(12),
-                              child: Text('To'),
-                            ),
-                          Flexible(
-                            child: StandardFieldWithLabelWidget(
-                              controller: _endTimeController,
-                              label: 'Email',
-                              placeholder: 'example@gov.kh',
-                              isOptional: false,
-                              inputType: TextFieldTypeEnum.time,
-                              isStartTime: false,
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   crossAxisAlignment: CrossAxisAlignment.end,
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Flexible(
+                      //       child: StandardFieldWithLabelWidget(
+                      //         controller: _startTimeController,
+                      //         label: 'Email',
+                      //         placeholder: 'example@gov.kh',
+                      //         isOptional: false,
+                      //         inputType: TextFieldTypeEnum.time,
+                      //         isStartTime: true,
+                      //       ),
+                      //     ),
+                      //     const Padding(
+                      //         padding: EdgeInsets.all(12),
+                      //         child: Text('To'),
+                      //       ),
+                      //     Flexible(
+                      //       child: StandardFieldWithLabelWidget(
+                      //         controller: _endTimeController,
+                      //         label: 'Email',
+                      //         placeholder: 'example@gov.kh',
+                      //         isOptional: false,
+                      //         inputType: TextFieldTypeEnum.time,
+                      //         isStartTime: false,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       StandardFieldWithLabelWidget(
                         controller: _emailController,
                         label: 'Email',
@@ -136,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                           Expanded(
                             child: TextButtonWidget(
                               isPrimary: true,
-                              btnAction: () => Navigator.pop(context),
+                              btnAction: () => context.go('/event'),
                               btnTitle: 'Login',
                             ),
                           ),

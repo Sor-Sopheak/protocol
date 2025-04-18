@@ -1,6 +1,5 @@
 import 'dart:html' as html;
 import 'dart:ui_web' as ui_web;
-import 'dart:typed_data';
 import 'dart:convert';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -16,9 +15,10 @@ class FileUploadPreviewWidget extends StatefulWidget {
 }
 
 class _FileUploadPreviewWidgetState extends State<FileUploadPreviewWidget> {
+  final List<PlatformFile> _multipleFiles = [];
+  final Map<String, String> _pdfBase64s = {};
+
   PlatformFile? _singleFile;
-  List<PlatformFile> _multipleFiles = [];
-  Map<String, String> _pdfBase64s = {}; // This still works for both
   PlatformFile? _selectedPreviewFile;
 
   Future<void> _pickSingleFile() async {
@@ -33,7 +33,6 @@ class _FileUploadPreviewWidgetState extends State<FileUploadPreviewWidget> {
       setState(() {
         _singleFile = result.files.first;
         _selectedPreviewFile = null;
-        print('Single file picked: ${_singleFile!.name}');
 
         if (_singleFile!.extension?.toLowerCase() == 'pdf') {
           _pdfBase64s[_singleFile!.name] = base64Encode(_singleFile!.bytes!);
@@ -56,9 +55,7 @@ class _FileUploadPreviewWidgetState extends State<FileUploadPreviewWidget> {
         _multipleFiles.addAll(newFiles);
         _selectedPreviewFile = null;
 
-        print('Multiple files picked:');
         for (var file in _multipleFiles) {
-          print(' - ${file.name}');
           if (file.extension?.toLowerCase() == 'pdf') {
             _pdfBase64s[file.name] = base64Encode(file.bytes!);
           }
@@ -89,7 +86,6 @@ class _FileUploadPreviewWidgetState extends State<FileUploadPreviewWidget> {
         html.Url.revokeObjectUrl(url);
       }
     }
-    print('Downloaded ${_multipleFiles.length} files.');
   }
 
   Widget _buildSmallPreview(PlatformFile file) {

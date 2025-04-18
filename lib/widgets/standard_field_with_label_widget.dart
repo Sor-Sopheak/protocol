@@ -134,7 +134,7 @@ class _StandardFieldWithLabelWidgetState
           (pickedTime.hour < _startTime!.hour ||
               (pickedTime.hour == _startTime!.hour &&
                   pickedTime.minute < _startTime!.minute))) {
-        return; //exit the function, if the time is not valid.
+        return; 
       }
 
       widget.onChanged?.call(widget.controller.text);
@@ -143,7 +143,6 @@ class _StandardFieldWithLabelWidgetState
 
   Future<void> _pickFiles() async {
     try {
-      // final path = 'files/${_pickedFiles.name}';
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],

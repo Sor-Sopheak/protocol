@@ -1,15 +1,12 @@
 import 'package:protocol_app/models/destination_route_model.dart';
 
 final navItems = [
-  const DestinationRouteModel('Event List', '/'),
+  const DestinationRouteModel('Event List', '/event'),
   const DestinationRouteModel('Participants List', '/participants')
 ];
 
+final eventItems = ['Today Event', 'Upcoming Event', 'Past Event'];
+
 final onboardingOption = ['View Detail', 'Edit'];
 
-final priorityOption = [
-  'Low',
-  'Normal',
-  'High',
-  'Immediate'
-];
+final priorityOption = ['Low', 'Normal', 'High', 'Immediate'];
