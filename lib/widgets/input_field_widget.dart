@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:protocol_app/constants/color_constants.dart';
 import 'package:protocol_app/models/text_field_type_enum.dart';
 
-class InputFieldWidget extends StatelessWidget {
+class InputFieldWidget extends StatefulWidget {
   final TextEditingController controller;
   final TextFieldTypeEnum inputType;
   final String placeholder;
@@ -29,61 +30,130 @@ class InputFieldWidget extends StatelessWidget {
   });
 
   @override
+  State<InputFieldWidget> createState() => _InputFieldWidgetState();
+}
+
+class _InputFieldWidgetState extends State<InputFieldWidget> {
+  bool _isHovering = false;
+  bool _isFocused = false;
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_handleFocusChange);
+  }
+
+  void _handleFocusChange() {
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_handleFocusChange);
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: inputType.keyboardType,
-      readOnly: readOnly,
-      onChanged: onChanged,
-      validator: validator,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      obscureText: obscureText,
-      maxLines: maxline,
-      maxLength: maxLength,
-      decoration: InputDecoration(
-        hintText: placeholder,
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(
-              color: Colors.black,
-              width: 2,
-              strokeAlign: BorderSide.strokeAlignInside),
-          borderRadius: BorderRadius.zero,
-        ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black,
-            width: 2,
-            strokeAlign: BorderSide.strokeAlignInside,
-          ),
-          borderRadius: BorderRadius.zero,
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black,
-            width: 2,
-            strokeAlign: BorderSide.strokeAlignInside,
-          ),
-          borderRadius: BorderRadius.zero,
-        ),
-        suffixIcon: (inputType == TextFieldTypeEnum.password)
-            ? IconButton(
-                icon: ImageIcon(
-                  AssetImage(
-                    obscureText
-                        ? 'assets/icons/invisibility_icon.png'
-                        : 'assets/icons/visibility_icon.png',
+    return MouseRegion(
+      onEnter: (event) => setState(() {
+        _isHovering = true;
+      }),
+      onExit: (event) => setState(() {
+        _isHovering = false;
+      }),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: _isFocused
+              ? [
+                  BoxShadow(
+                    color: const Color(blueColor).withAlpha(
+                        (0.3 * 255).round()), //30% opacity using withAlpha
+                    spreadRadius: 2,
+                    blurRadius: 0,
+                    offset: const Offset(0, 0),
                   ),
-                ),
-                onPressed: toggleObscure,
-              )
-            : (suffixIcon != null)
+                ]
+              : _isHovering
+                  ? [
+                      BoxShadow(
+                        color: const Color(greyColor)
+                            .withAlpha((0.3 * 255).round()),
+                        spreadRadius: 2,
+                        blurRadius: 1,
+                        offset: const Offset(0, 0),
+                      ),
+                    ]
+                  : null,
+        ),
+        child: TextFormField(
+          controller: widget.controller,
+          focusNode: _focusNode,
+          keyboardType: widget.inputType.keyboardType,
+          readOnly: widget.readOnly,
+          onChanged: widget.onChanged,
+          validator: widget.validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          obscureText: widget.obscureText,
+          maxLines: widget.maxline,
+          maxLength: widget.maxLength,
+          cursorColor: const Color(blueColor),
+          cursorWidth: 1,
+          decoration: InputDecoration(
+            hintText: widget.placeholder,
+            fillColor: const Color(whiteColor),
+            filled: true,
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(greyColor),
+                width: 1,
+                strokeAlign: BorderSide.strokeAlignInside,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(4)),
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(greyColor),
+                width: 1,
+                strokeAlign: BorderSide.strokeAlignInside,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(4)),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(blueColor),
+                width: 1,
+                strokeAlign: BorderSide.strokeAlignInside,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(4)),
+            ),
+            suffixIcon: (widget.inputType == TextFieldTypeEnum.password)
                 ? IconButton(
                     icon: ImageIcon(
-                      AssetImage(suffixIcon!),
+                      AssetImage(
+                        widget.obscureText
+                            ? 'assets/icons/invisibility_icon.png'
+                            : 'assets/icons/visibility_icon.png',
+                      ),
                     ),
-                    onPressed: toggleObscure,
+                    onPressed: widget.toggleObscure,
                   )
-                : const SizedBox(),
+                : (widget.suffixIcon != null)
+                    ? IconButton(
+                        icon: ImageIcon(
+                          AssetImage(widget.suffixIcon!),
+                        ),
+                        onPressed: widget.toggleObscure,
+                      )
+                    : const SizedBox(),
+          ),
+        ),
       ),
     );
   }

@@ -1,0 +1,1 @@
+enum PriorityLevelEnum { normal, urgent }

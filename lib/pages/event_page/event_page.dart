@@ -3,6 +3,7 @@ import 'package:protocol_app/constants/app_constants.dart';
 import 'package:protocol_app/pages/event_page/past_event_content.dart';
 import 'package:protocol_app/pages/event_page/today_event_content.dart';
 import 'package:protocol_app/pages/event_page/upcoming_event_content.dart';
+import 'package:protocol_app/widgets/button_with_icon_widget.dart';
 import 'package:protocol_app/widgets/page_header_widget.dart';
 import 'package:protocol_app/widgets/text_tab_button_widget.dart';
 
@@ -24,10 +25,19 @@ class _EventPageState extends State<EventPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const PageHeaderWidget(
-              title: 'Event List',
-              isExport: true,
-              btnTitle: 'Export',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const PageHeaderWidget(
+                  title: 'All Event',
+                  isExport: false,
+                ),
+                ButtonWithIconWidget(
+                  btnAction: () {},
+                  iconPath: 'assets/icons/add.png',
+                  btnTitle: 'Create New Event',
+                ),
+              ],
             ),
             Container(
               decoration: const BoxDecoration(

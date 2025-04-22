@@ -48,7 +48,6 @@ class _StandardFieldWithLabelWidgetState
   bool _obscureText = true;
   DateTime? _selectedDate;
   TimeOfDay? _startTime;
-  TimeOfDay? _endTime;
 
   List<PlatformFile> _pickedFiles = [];
   String _fileErrorMessage = '';
@@ -125,7 +124,6 @@ class _StandardFieldWithLabelWidgetState
               return;
             }
           }
-          _endTime = pickedTime;
           widget.controller.text = pickedTime.format(context);
         }
       });
@@ -134,7 +132,7 @@ class _StandardFieldWithLabelWidgetState
           (pickedTime.hour < _startTime!.hour ||
               (pickedTime.hour == _startTime!.hour &&
                   pickedTime.minute < _startTime!.minute))) {
-        return; 
+        return;
       }
 
       widget.onChanged?.call(widget.controller.text);
@@ -142,22 +140,18 @@ class _StandardFieldWithLabelWidgetState
   }
 
   Future<void> _pickFiles() async {
-    try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
-        allowMultiple: true,
-      );
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
+      allowMultiple: true,
+    );
 
-      if (result != null && result.files.isNotEmpty) {
-        setState(() {
-          _pickedFiles = result.files;
-          _fileErrorMessage = '';
-        });
-        _validateFilesSize();
-      }
-    } catch (e) {
-      print("Error picking files: $e");
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        _pickedFiles = result.files;
+        _fileErrorMessage = '';
+      });
+      _validateFilesSize();
     }
   }
 

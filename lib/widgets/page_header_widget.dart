@@ -79,7 +79,6 @@ class PageHeaderWidget extends StatelessWidget {
                   _exportToPdf(context);
                 },
                 btnTitle: btnTitle ?? '',
-                btnColor: Colors.grey.shade200,
                 titleColor: Colors.black,
               )
             : const SizedBox.shrink()

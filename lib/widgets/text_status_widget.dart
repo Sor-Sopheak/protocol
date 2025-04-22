@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:protocol_app/models/status_enum.dart';
+import 'package:protocol_app/utilities/status_color.dart';
 
 class TextStatusWidget extends StatelessWidget {
   final int count;
   final String statusTitle;
+  final StatusEnum? status;
   const TextStatusWidget({
     super.key,
     required this.count,
     required this.statusTitle,
+    this.status,
   });
 
   @override
@@ -25,8 +29,14 @@ class TextStatusWidget extends StatelessWidget {
         ),
         Text(
           '$count $statusTitle',
-          style: const TextStyle(
-            color: Colors.black,
+          style: TextStyle(
+            color: statusColor(
+              status: status,
+              isText: true,
+              isBackground: false,
+              isStroke: false,
+              isIcon: false,
+            ),
             fontSize: 15,
             fontWeight: FontWeight.w500,
           ),
