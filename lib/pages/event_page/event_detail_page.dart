@@ -153,9 +153,9 @@ class _EventDetailPageState extends State<EventDetailPage> {
   Widget _getCurrentContent() {
     switch (_activeTabIndex) {
       case 0:
-        return const HostEventTableWidget();
-      case 1:
         return const OverviewEventContent();
+      case 1:
+        return const HostEventTableWidget();
       case 2:
         return const PastEventContent();
       default:

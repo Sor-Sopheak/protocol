@@ -36,7 +36,7 @@ class User extends Searchable {
 }
 
 final List<User> allUsers = [
-  User(name: 'Alice Smith', position: 'minister', joinAs: 'President'),
+  User(name: 'ដា វីដ', position: 'minister', joinAs: 'President'),
   User(
       name: 'Bob Johnson',
       position: 'secretaries of state',

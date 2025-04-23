@@ -89,9 +89,9 @@ class _TableWidgetState<M> extends State<TableWidget<M>> {
           ),
           if (widget.actionsBuilders != null &&
               widget.actionsBuilders!.isNotEmpty)
-            SizedBox(
+            const SizedBox(
               width: 60,
-              child: const Text(
+              child: Text(
                 actionKh,
                 style: TextStyle(
                   color: Colors.black,

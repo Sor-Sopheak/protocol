@@ -1,4 +1,11 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
+// import 'package:web/web.dart' as web;
+import 'dart:html' as html;
+
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 import 'package:protocol_app/constants/app_constants.dart';
 import 'package:protocol_app/constants/color_constants.dart';
 import 'package:protocol_app/widgets/drop_down_button_widget.dart';
@@ -18,6 +25,128 @@ class _HostEventTableWidgetState extends State<HostEventTableWidget> {
   final List<String> list = <String>['One', 'Two', 'Three', 'Four'];
   String userSearchQuery = '';
   User? selectedUser;
+
+  Future<void> _generatePdf() async {
+    final pdf = pw.Document();
+    final kantumruy = await PdfGoogleFonts.kantumruyProRegular();
+    final kantumruyBold = await PdfGoogleFonts.kantumruyProBold();
+
+    pdf.addPage(
+      pw.MultiPage(
+        build: (pw.Context context) => [
+          pw.Center(
+            child: pw.Column(children: [
+              pw.Text(
+                'ព្រះរាជាណាចក្រកម្ពុជា',
+                style: pw.TextStyle(
+                  font: kantumruyBold,
+                  fontSize: 12,
+                  color: PdfColors.black,
+                ),
+              ),
+              pw.Text(
+                'ជាតិ សាសនា ព្រះមហាក្សត្រ',
+                style: pw.TextStyle(
+                  font: kantumruyBold,
+                  fontSize: 12,
+                  color: PdfColors.black,
+                ),
+              ),
+              // pw.Text(
+              //   '── ❈ ──',
+              //   // '༺✧༻',
+              //   style: pw.TextStyle(
+              //     font: kantumruyBold,
+              //     fontSize: 14,
+              //     fontWeight: pw.FontWeight.bold,
+              //     color: PdfColors.blue,
+              //   ),
+              // ),
+            ]),
+          ),
+          pw.Table(
+            border: pw.TableBorder.all(),
+            columnWidths: const {
+              0: pw.FlexColumnWidth(2),
+              1: pw.FlexColumnWidth(2),
+              2: pw.FlexColumnWidth(2),
+            },
+            children: [
+              // Header Row with Background Color
+              pw.TableRow(
+                decoration:
+                    const pw.BoxDecoration(color: PdfColors.blueGrey100),
+                children: eventItems.map((title) {
+                  return pw.Padding(
+                    padding: const pw.EdgeInsets.all(8),
+                    child: pw.Text(
+                      title,
+                      style: pw.TextStyle(
+                        font: kantumruy,
+                        fontSize: 12,
+                        color: PdfColors.black,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              // Data Rows
+              ...allUsers.map((user) {
+                return pw.TableRow(
+                  children: [
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(8),
+                      child: pw.Text(
+                        user.name,
+                        style: pw.TextStyle(
+                          font: kantumruy,
+                          fontSize: 12,
+                          color: PdfColors.black,
+                        ),
+                      ),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(8),
+                      child: pw.Text(user.position),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(8),
+                      child: pw.Text(user.joinAs),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    final pdfBytes = await pdf.save();
+
+    // Create a PlatformFile-like object
+    final platformFile = PlatformFile(
+      name: 'users.pdf',
+      bytes: pdfBytes,
+      size: pdfBytes.length, // get the size
+      path: null, // Path is not relevant for web Blob download
+    );
+
+    // Use your existing download function
+    _downloadFile(platformFile);
+  }
+
+  void _downloadFile(PlatformFile file) {
+    if (file.bytes != null) {
+      final blob = html.Blob([file.bytes]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.AnchorElement(href: url)
+        ..setAttribute('download', file.name)
+        ..click();
+      html.Url.revokeObjectUrl(url);
+    }
+  }
 
   Widget _header(BuildContext context) {
     return Container(
@@ -43,7 +172,9 @@ class _HostEventTableWidgetState extends State<HostEventTableWidget> {
               const SizedBox(width: 16),
               FlatButtonWidget(
                 title: 'Export',
-                btnAction: () {},
+                btnAction: () {
+                  _generatePdf();
+                },
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 borderColor: const Color(blueColor),
@@ -128,7 +259,7 @@ class _HostEventTableWidgetState extends State<HostEventTableWidget> {
             flex: 1,
             child: SearchWidget<User>(
               items: allUsers,
-              hintText: "Search user...",
+              hintText: "Search...",
               searchIcon: true,
               onSearch: (query) {
                 setState(() {
@@ -159,8 +290,8 @@ class _HostEventTableWidgetState extends State<HostEventTableWidget> {
       children: [
         _header(context),
         _subHeader(context),
+        //customtable of user display
         Container(
-          // margin: const EdgeInsets.symmetric(horizontal: 10),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
           color: const Color(whiteColor),
           child: TableWidget<User>(
