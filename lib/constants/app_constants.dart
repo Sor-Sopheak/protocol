@@ -18,6 +18,32 @@ final List<String> tableHeader = [
 ];
 
 
+
+/// list of option
+final List<String> statusOption = [
+  'All',
+  'Draft',
+  'Published',
+  'Completed',
+];
+final List<String> scheduleOption = [
+  'All',
+  'Today',
+  'Upcoming',
+  'Past',
+];
+final List<String> priorityOption = [
+  'All',
+  'Urgent',
+  'Normal',
+];
+final List<String> confidentialityOption = [
+  'All',
+  'Confidential',
+  'Non-confidential',
+];
+
+
 class User extends Searchable {
   final String name;
   final String position;
