@@ -11,7 +11,6 @@ import 'package:protocol_app/constants/color_constants.dart';
 import 'package:protocol_app/widgets/drop_down_button_widget.dart';
 import 'package:protocol_app/widgets/flat_button_widget.dart';
 import 'package:protocol_app/widgets/search_widget.dart';
-import 'package:protocol_app/widgets/table_widget.dart';
 import 'package:protocol_app/widgets/text_button_widget.dart';
 
 class HostEventTableWidget extends StatefulWidget {
@@ -290,22 +289,21 @@ class _HostEventTableWidgetState extends State<HostEventTableWidget> {
       children: [
         _header(context),
         _subHeader(context),
-        //customtable of user display
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
           color: const Color(whiteColor),
-          child: TableWidget<User>(
-            itemHeader: eventItems,
-            itemContent: allUsers,
-            columnExtractors: [
-              (user) => user.name,
-              (user) => user.position,
-              (user) => user.joinAs,
-            ],
-            actionsBuilders: const [Icon(Icons.delete)],
-            leadingCheckboxBuilder:
-                const Checkbox(value: false, onChanged: null),
-          ),
+          // child: TableWidget<User>(
+          //   itemHeader: eventItems,
+          //   itemContent: allUsers,
+          //   columnExtractors: [
+          //     (user) => user.name,
+          //     (user) => user.position,
+          //     (user) => user.joinAs,
+          //   ],
+          //   actionsBuilders: const [Icon(Icons.delete)],
+          //   leadingCheckboxBuilder:
+          //       const Checkbox(value: false, onChanged: null),
+          // ),
         )
       ],
     );

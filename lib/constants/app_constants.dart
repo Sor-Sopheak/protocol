@@ -69,7 +69,7 @@ final List<User> allUsers = [
       joinAs: 'Participants'),
   User(
       name: 'Charlie Brown',
-      position: 'under secretaries of state',
+      position: 'under secretaries of state, under secretaries of state, under secretaries of state',
       joinAs: 'Participants'),
   User(name: 'David Lee', position: 'deputy governor', joinAs: 'Participants'),
   User(

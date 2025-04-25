@@ -28,7 +28,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
   void initState() {
     super.initState();
     priority = PriorityLevelEnum.urgent;
-    status = StatusEnum.inProgress;
+    status = StatusEnum.all;
   }
 
   @override

@@ -1,11 +1,13 @@
 import 'package:protocol_app/models/director_model.dart';
 import 'package:protocol_app/models/file_model.dart';
 import 'package:protocol_app/models/participant_summary_model.dart';
+import 'package:protocol_app/models/priority_level_enum.dart';
+import 'package:protocol_app/models/status_enum.dart';
 
 class EventModel {
   String? id;
-  String status;
-  String priority;
+  StatusEnum status;
+  PriorityLevelEnum priority;
   bool isConfidential;
   String announcementTitle;
   String title;
@@ -15,7 +17,7 @@ class EventModel {
   String room;
   String noted;
   String gratitude;
-  List<DirectorModel>? directors; //directedBy
+  List<DirectorModel>? directors;
   List<FileModel> files;
   ParticipantSummaryModel participantSummary;
   String? updatedAt;
@@ -42,8 +44,9 @@ class EventModel {
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
       id: json['event_id'] as String?,
-      status: json['status'], //status
-      priority: json['priority'],
+      status: StatusEnumExtension.fromString(json['status'] ?? 'all'),
+      priority:
+          PriorityLevelEnumExtension.fromString(json['priority'] ?? 'all'),
       isConfidential: json['is_confidential'],
       announcementTitle: json['announcement_title'],
       title: json['title'],

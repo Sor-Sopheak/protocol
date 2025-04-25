@@ -1,5 +1,5 @@
 class ParticipantModel {
-  final String? id;
+  final int? id;
   final String khName;
   final String enName;
   final String gender;
@@ -33,7 +33,7 @@ class ParticipantModel {
 
   factory ParticipantModel.fromJson(Map<String, dynamic> json) {
     return ParticipantModel(
-      id: json['id'],
+      id: json['participant_id'],
       khName: json['kh_name'],
       enName: json['en_name'],
       gender: json['gender'],
@@ -52,7 +52,7 @@ class ParticipantModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'participant_id': id,
       'kh_name': khName,
       'en_name': enName,
       'gender': gender,
@@ -71,6 +71,6 @@ class ParticipantModel {
 
   @override
   String toString() {
-    return 'ParticipantModel(id: $id, khName: $khName, enName: $enName, gender: $gender, email: $email, phoneNumber: $phoneNumber, department: $department, position: $position, idNumber: $idNumber, title: $title, level: $level, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ParticipantModel(participant_id: $id, khName: $khName, enName: $enName, gender: $gender, email: $email, phoneNumber: $phoneNumber, department: $department, position: $position, idNumber: $idNumber, title: $title, level: $level, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }

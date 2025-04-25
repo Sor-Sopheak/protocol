@@ -10,6 +10,8 @@ class PriorityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (level) {
+      case PriorityLevelEnum.all:
+        return Container();
       case PriorityLevelEnum.normal:
         return Container(
           decoration: BoxDecoration(

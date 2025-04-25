@@ -97,7 +97,7 @@ class GeneralCardWidget extends StatelessWidget {
                   ' ទីស្ដីការក្រសួងប្រៃសណីយ៍និងទូរគមនាគមន៍, អគារ “ក”,  ជាន់ទី ៣, បន្ទប់ សាលប្រជុំ A3',
             ),
             const SizedBox(height: 16),
-            const StatusWidget(status: StatusEnum.inProgress),
+            const StatusWidget(status: StatusEnum.published),
             const SizedBox(height: 16),
             const Divider(
               color: Color(0xFFD0D5DD),
@@ -129,13 +129,13 @@ class GeneralCardWidget extends StatelessWidget {
                 const TextStatusWidget(
                   count: 1,
                   statusTitle: 'Comfirmation',
-                  status: StatusEnum.confirmation,
+                  status: StatusEnum.completed,
                 ),
                 const SizedBox(width: 16),
                 const TextStatusWidget(
                   count: 1,
                   statusTitle: 'Not Attending',
-                  status: StatusEnum.notAttending,
+                  status: StatusEnum.draft,
                 ),
               ],
             )

@@ -1,39 +1,34 @@
 enum StatusEnum {
+  all,
   draft,
-  inProgress,
-  confirmation,
-  notAttending,
-  // onHold,
-  // completed,
-  // rejected,
-  // confirmed,
-  // attended,
+  published,
+  completed,
 }
 
 extension StatusEnumExtension on StatusEnum {
   String get statusText {
     switch (this) {
+      case StatusEnum.all:
+        return 'All';
       case StatusEnum.draft:
         return 'Draft';
-      case StatusEnum.inProgress:
-        return 'In Progress';
-      case StatusEnum.confirmation:
-        return 'Confirmation';
-      case StatusEnum.notAttending:
-        return 'Not Attending';
+      case StatusEnum.published:
+        return 'Published';
+      case StatusEnum.completed:
+        return 'Completed';
     }
   }
 
   static StatusEnum fromString(String status) {
     switch (status.toLowerCase()) {
+      case 'all':
+        return StatusEnum.all;
       case 'draft':
         return StatusEnum.draft;
-      case 'in progress':
-        return StatusEnum.inProgress;
-      case 'confirmation':
-        return StatusEnum.confirmation;
-      case 'not attending':
-        return StatusEnum.notAttending;
+      case 'published':
+        return StatusEnum.published;
+      case 'completed':
+        return StatusEnum.completed;
       default:
         throw ArgumentError('Invalid status value: $status');
     }
