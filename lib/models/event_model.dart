@@ -5,62 +5,72 @@ import 'package:protocol_app/models/priority_level_enum.dart';
 import 'package:protocol_app/models/status_enum.dart';
 
 class EventModel {
-  String? id;
-  StatusEnum status;
+  int? id;
+  StatusEnum? status;
   PriorityLevelEnum priority;
   bool isConfidential;
-  String announcementTitle;
+  String? announcementTitle;
   String title;
   String date;
   String time;
   String location;
   String room;
-  String noted;
-  String gratitude;
+  String? noted;
+  String? gratitude;
   List<DirectorModel>? directors;
-  List<FileModel> files;
+  List<FileModel>? files;
   ParticipantSummaryModel participantSummary;
   String? updatedAt;
 
   EventModel({
     this.id,
-    required this.status,
+    this.status,
     required this.priority,
     required this.isConfidential,
-    required this.announcementTitle,
+    this.announcementTitle,
     required this.title,
     required this.date,
     required this.time,
     required this.location,
     required this.room,
-    required this.noted,
-    required this.gratitude,
-    required this.directors,
-    required this.files,
+    this.noted,
+    this.gratitude,
+    this.directors,
+    this.files,
     required this.participantSummary,
     this.updatedAt,
   });
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
-      id: json['event_id'] as String?,
-      status: StatusEnumExtension.fromString(json['status'] ?? 'all'),
+      id: json['event_id'] as int? ?? 0,
+      status: json['status'] != null
+          ? StatusEnumExtension.fromString(json['status'] ?? 'all')
+          : null,
       priority:
           PriorityLevelEnumExtension.fromString(json['priority'] ?? 'all'),
-      isConfidential: json['is_confidential'],
-      announcementTitle: json['announcement_title'],
-      title: json['title'],
-      date: json['date'],
-      time: json['time'],
-      location: json['location'],
-      room: json['room'],
-      noted: json['noted'],
-      gratitude: json['gratitude'],
-      directors: List<DirectorModel>.from(json['directors'] ?? []),
-      files: List<FileModel>.from(json['files'] ?? []),
+      isConfidential: json['is_confidential'] ?? false,
+      announcementTitle: json['announcement_title'] ?? '',
+      title: json['title'] ?? '',
+      date: json['date'] ?? '',
+      time: json['time'] ?? '',
+      location: json['location'] ?? '',
+      room: json['room'] ?? '',
+      noted: json['noted'] ?? '',
+      gratitude: json['gratitude'] ?? '',
+      directors: (json['directors'] is List)
+          ? (json['directors'] as List)
+              .map((item) => DirectorModel.fromJson(item))
+              .toList()
+          : [],
+      files: (json['files'] is List)
+          ? (json['files'] as List)
+              .map((item) => FileModel.fromJson(item))
+              .toList()
+          : [],
       participantSummary:
-          ParticipantSummaryModel.fromJson(json['participant_summary']),
-      updatedAt: json['updated_at'] as String?,
+          ParticipantSummaryModel.fromJson(json['participant_summary'] ?? {}),
+      updatedAt: json['updated_at']?.toString(),
     );
   }
 

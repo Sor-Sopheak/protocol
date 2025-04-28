@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:protocol_app/constants/color_constants.dart';
 import 'package:protocol_app/constants/string_constants.dart';
+import 'package:protocol_app/models/responses/auth_response_model.dart';
+import 'package:protocol_app/models/responses/error_response_model.dart';
 import 'package:protocol_app/models/text_field_type_enum.dart';
+import 'package:protocol_app/pages/login_header.dart';
+import 'package:protocol_app/providers/auth_provider.dart';
+import 'package:protocol_app/utilities/overlay_service.dart';
 import 'package:protocol_app/utilities/text_field_validator.dart';
 import 'package:protocol_app/widgets/standard_field_with_label_widget.dart';
 import 'package:protocol_app/widgets/text_button_widget.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,6 +26,49 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passWordController = TextEditingController();
   // TextEditingController _startTimeController = TextEditingController();
   // TextEditingController _endTimeController = TextEditingController();
+
+  Future<void> _onSubmit() async {
+    if (!_formKey.currentState!.validate()) {
+      OverlayService.showOverlayStatus('Please fix the errors in the form.',
+          status: false);
+      return;
+    }
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    final result = await authProvider.login(
+      _emailController.text,
+      _passWordController.text,
+    );
+
+    if (result is AuthResponseModel) {
+      _formKey.currentState!.reset();
+      OverlayService.showOverlayStatus(result.message, status: true);
+      context.go('/event');
+    } else if (result is ErrorResponseModel) {
+      String errorMessage = '';
+
+      if (result.errors.isNotEmpty) {
+        result.errors.forEach((key, value) {
+          if (value is List) {
+            errorMessage += '$key: ${value.join(', ')}\n';
+          } else if (value is String) {
+            errorMessage += '$key: $value\n';
+          } else {
+            errorMessage += '$key: $value\n'; // Handle other potential types
+          }
+        });
+      } else {
+        errorMessage =
+            'Login failed. Please check your credentials.'; // Generic error if no specific errors
+      }
+
+      OverlayService.showOverlayStatus(errorMessage.trim(), status: false);
+    } else {
+      OverlayService.showOverlayStatus('anUnexpectedErrorOccurred',
+          status: false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,54 +137,13 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Column(
-                            children: [
-                              Text(
-                                loginTitleKh,
-                                style: TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                loginDescriptionKh,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                          const LoginHeader(
+                            title: loginTitleKh,
+                            description: loginDescriptionKh,
                           ),
                           const SizedBox(
                             height: 22,
                           ),
-                          // Row(
-                          //   crossAxisAlignment: CrossAxisAlignment.end,
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   children: [
-                          //     Flexible(
-                          //       child: StandardFieldWithLabelWidget(
-                          //         controller: _startTimeController,
-                          //         label: 'Email',
-                          //         placeholder: 'example@gov.kh',
-                          //         isOptional: false,
-                          //         inputType: TextFieldTypeEnum.time,
-                          //         isStartTime: true,
-                          //       ),
-                          //     ),
-                          //     const Padding(
-                          //         padding: EdgeInsets.all(12),
-                          //         child: Text('To'),
-                          //       ),
-                          //     Flexible(
-                          //       child: StandardFieldWithLabelWidget(
-                          //         controller: _endTimeController,
-                          //         label: 'Email',
-                          //         placeholder: 'example@gov.kh',
-                          //         isOptional: false,
-                          //         inputType: TextFieldTypeEnum.time,
-                          //         isStartTime: false,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                           StandardFieldWithLabelWidget(
                             controller: _emailController,
                             label: 'Email',
@@ -164,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                               Expanded(
                                 child: TextButtonWidget(
                                   isPrimary: true,
-                                  btnAction: () => context.go('/event'),
+                                  btnAction: () => _onSubmit(),
                                   btnTitle: loginKh,
                                 ),
                               ),

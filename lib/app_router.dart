@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:protocol_app/pages/event_page/add_new_event.dart';
 import 'package:protocol_app/pages/event_page/event_detail_page.dart';
 import 'package:protocol_app/pages/login_page.dart';
 import 'package:protocol_app/pages/main_page.dart';
@@ -22,6 +23,11 @@ class AppRouter {
             name: 'event',
             builder: (context, state) => const EventPage(),
             routes: [
+              GoRoute(
+                path: 'addNewEvent',
+                name: 'newEvent',
+                builder: (context, state) => const AddNewEvent(),
+              ),
               GoRoute(
                 path: ':eventId',
                 name: 'eventDetail',

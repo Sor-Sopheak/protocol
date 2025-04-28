@@ -19,7 +19,7 @@ extension StatusEnumExtension on StatusEnum {
     }
   }
 
-  static StatusEnum fromString(String status) {
+  static StatusEnum? fromString(String status) {
     switch (status.toLowerCase()) {
       case 'all':
         return StatusEnum.all;
@@ -30,7 +30,7 @@ extension StatusEnumExtension on StatusEnum {
       case 'completed':
         return StatusEnum.completed;
       default:
-        throw ArgumentError('Invalid status value: $status');
+        return null;
     }
   }
 }

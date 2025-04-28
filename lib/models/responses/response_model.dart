@@ -12,10 +12,13 @@ class ResponseModel<T> {
   });
 
   factory ResponseModel.fromJson(
-      Map<String, dynamic> json, T Function(Map<String, dynamic>) fromJson) {
+    Map<String, dynamic> json,
+    T Function(Map<String, dynamic>) fromJson, {
+    String listKey = 'items', // <--- default parameter
+  }) {
     return ResponseModel<T>(
       currentPage: json['current_page'] ?? 0,
-      items: (json['items'] as List?)
+      items: (json[listKey] as List?)
               ?.map((item) => fromJson(item as Map<String, dynamic>))
               .toList() ??
           [],
@@ -24,10 +27,13 @@ class ResponseModel<T> {
     );
   }
 
-  Map<String, dynamic> toJson(Map<String, dynamic> Function(T) toJson) {
+  Map<String, dynamic> toJson(
+    Map<String, dynamic> Function(T) toJson, {
+    String listKey = 'items', // <--- same default parameter
+  }) {
     return {
       'current_page': currentPage,
-      'items': items.map((item) => toJson(item)).toList(),
+      listKey: items.map((item) => toJson(item)).toList(),
       'page_size': pageSize,
       'total': total,
     };

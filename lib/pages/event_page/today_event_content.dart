@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:protocol_app/constants/color_constants.dart';
 import 'package:protocol_app/models/event_model.dart';
 import 'package:protocol_app/models/priority_level_enum.dart';
 import 'package:protocol_app/models/status_enum.dart';
+import 'package:protocol_app/pages/empty_data_content.dart';
 import 'package:protocol_app/providers/event_provider.dart';
+import 'package:protocol_app/widgets/button_with_icon_widget.dart';
 import 'package:protocol_app/widgets/general_card_widget.dart';
 import 'package:protocol_app/widgets/text_button_toggle_widget.dart';
 import 'package:provider/provider.dart';
@@ -16,44 +19,39 @@ class TodayEventContent extends StatefulWidget {
 }
 
 class _TodayEventContentState extends State<TodayEventContent> {
-  bool _isConfidential = true;
-  late PriorityLevelEnum priority;
-  late StatusEnum status;
-
   @override
   void initState() {
     super.initState();
-    priority = PriorityLevelEnum.urgent;
-    status = StatusEnum.all;
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchEvents();
     });
   }
 
   void _fetchEvents() {
-    context.read<EventProvider>().fetchEvents(
-          null,
-          _isConfidential,
-          'all',
-          'all',
-          'all',
-          1,
-          10,
-        );
+    final provider = context.read<EventProvider>();
+    provider.fetchEvents(
+      provider.keyword,
+      provider.isConfidential,
+      provider.schedule,
+      provider.status.name,
+      provider.priority.name,
+      1,
+      10,
+    );
   }
 
   void _handleConfidentialityToggle(bool isPrimaryActive) {
+    final provider = context.read<EventProvider>();
     setState(() {
-      _isConfidential = isPrimaryActive;
-      priority = PriorityLevelEnum.urgent;
+      provider.isConfidential = isPrimaryActive;
       _fetchEvents();
     });
   }
 
   void _handlePriorityToggle(bool isPrimaryActive) {
+    final provider = context.read<EventProvider>();
     setState(() {
-      priority =
+      provider.priority =
           isPrimaryActive ? PriorityLevelEnum.urgent : PriorityLevelEnum.normal;
       _fetchEvents();
     });
@@ -61,51 +59,49 @@ class _TodayEventContentState extends State<TodayEventContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer<EventProvider>(builder: (context, eventProvider, child) {
+      if (eventProvider.isLoading) {
+        return const Center(child: CircularProgressIndicator());
+      } else if (eventProvider.events.isNotEmpty) {
+        return Container(
+          color: Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButtonToggleWidget(
-                    title: 'Confidentiality',
-                    primaryTitle: 'Confidential',
-                    secondaryTitle: 'Non-confidential',
-                    onToggle: _handleConfidentialityToggle,
-                    // initialPrimaryActive: _isConfidential,
+                  Row(
+                    children: [
+                      TextButtonToggleWidget(
+                        title: 'Confidentiality',
+                        primaryTitle: 'Confidential',
+                        secondaryTitle: 'Non-confidential',
+                        onToggle: _handleConfidentialityToggle,
+                      ),
+                      const SizedBox(width: 12),
+                      TextButtonToggleWidget(
+                        title: 'Priority',
+                        primaryTitle: 'In Urgent',
+                        secondaryTitle: 'Normal',
+                        onToggle: _handlePriorityToggle,
+                      ),
+                      const SizedBox(width: 12),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  TextButtonToggleWidget(
-                    title: 'Priority',
-                    primaryTitle: 'In Urgent',
-                    secondaryTitle: 'Normal',
-                    onToggle: _handlePriorityToggle,
-                    // nitialPrimaryActive: _priority == PriorityLevelEnum.urgent,
+                  const SizedBox(
+                    width: 250,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //search
+                      ],
+                    ),
                   ),
-                  const SizedBox(width: 12),
                 ],
               ),
-              const SizedBox(
-                width: 250,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //search
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Consumer<EventProvider>(builder: (context, eventProvider, child) {
-            if (eventProvider.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (eventProvider.events.isNotEmpty) {
-              return ListView.separated(
+              const SizedBox(height: 24),
+              ListView.separated(
                 shrinkWrap: true,
                 physics: const ClampingScrollPhysics(),
                 itemCount: eventProvider.events.length,
@@ -127,13 +123,27 @@ class _TodayEventContentState extends State<TodayEventContent> {
                     ),
                   );
                 },
-              );
-            } else {
-              return const Center(child: Text('No events found.'));
-            }
-          }),
-        ],
-      ),
-    );
+              )
+            ],
+          ),
+        );
+      } else {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Color(redColor)
+          ),
+          child: EmptyDataContent(
+            title: 'You din\'t have any Event yet',
+            subtitle: 'Please start by creating a new event.',
+            isbuttonVisible: true,
+            button: ButtonWithIconWidget(
+              btnAction: () {},
+              iconPath: 'assets/icons/add.png',
+              btnTitle: 'Create New Event',
+            ),
+          ),
+        );
+      }
+    });
   }
 }

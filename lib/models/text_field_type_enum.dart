@@ -10,6 +10,7 @@ enum TextFieldTypeEnum {
   time,
   file,
   dropdown,
+  radio,
 }
 
 extension TextFieldTypeEnumExtensio on TextFieldTypeEnum {
@@ -32,6 +33,8 @@ extension TextFieldTypeEnumExtensio on TextFieldTypeEnum {
       case TextFieldTypeEnum.file:
         return TextInputType.text;
       case TextFieldTypeEnum.dropdown:
+        return TextInputType.text;
+      case TextFieldTypeEnum.radio:
         return TextInputType.text;
     }
   }

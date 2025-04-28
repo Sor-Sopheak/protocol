@@ -26,4 +26,12 @@ class TextFieldValidator {
     }
     return null;
   }
+
+  static String? textValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter text';
+    }
+    return null;
+  }
+
 }

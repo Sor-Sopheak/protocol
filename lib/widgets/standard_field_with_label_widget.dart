@@ -4,12 +4,16 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:protocol_app/constants/color_constants.dart';
 import 'package:protocol_app/models/text_field_type_enum.dart';
 import 'package:protocol_app/utilities/date_time_formatter.dart';
+import 'package:protocol_app/widgets/custom_radio_widget.dart'
+    show CustomRadioWidget;
 import 'package:protocol_app/widgets/input_field_widget.dart';
 
 class StandardFieldWithLabelWidget extends StatefulWidget {
   final TextEditingController controller;
+  final TextEditingController? endTimeController;
   final String label;
   final String placeholder;
   final String? iconPath;
@@ -20,11 +24,11 @@ class StandardFieldWithLabelWidget extends StatefulWidget {
   final List<String>? options;
   final List<String>? Function(List<String>?)? onChangedOption;
   final List<String>? dropdownItems;
-  final bool isStartTime;
 
   const StandardFieldWithLabelWidget({
     super.key,
     required this.controller,
+    this.endTimeController,
     required this.label,
     required this.placeholder,
     this.iconPath,
@@ -35,7 +39,6 @@ class StandardFieldWithLabelWidget extends StatefulWidget {
     this.options,
     this.onChangedOption,
     this.dropdownItems,
-    this.isStartTime = true,
   });
 
   @override
@@ -48,6 +51,7 @@ class _StandardFieldWithLabelWidgetState
   bool _obscureText = true;
   DateTime? _selectedDate;
   TimeOfDay? _startTime;
+  TimeOfDay? _endTime;
 
   List<PlatformFile> _pickedFiles = [];
   String _fileErrorMessage = '';
@@ -94,7 +98,8 @@ class _StandardFieldWithLabelWidgetState
     return null;
   }
 
-  Future<void> _selectTime(BuildContext context) async {
+  Future<void> _selectTime(BuildContext context,
+      {required bool isStartTime}) async {
     final pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -108,14 +113,16 @@ class _StandardFieldWithLabelWidgetState
 
     if (pickedTime != null) {
       setState(() {
-        if (widget.isStartTime) {
+        if (isStartTime) {
           _startTime = pickedTime;
           widget.controller.text = pickedTime.format(context);
         } else {
+          _endTime = pickedTime;
+
           if (_startTime != null) {
-            if (pickedTime.hour < _startTime!.hour ||
-                (pickedTime.hour == _startTime!.hour &&
-                    pickedTime.minute < _startTime!.minute)) {
+            final startMinutes = _startTime!.hour * 60 + _startTime!.minute;
+            final endMinutes = _endTime!.hour * 60 + _endTime!.minute;
+            if (endMinutes < startMinutes) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                     content:
@@ -124,16 +131,9 @@ class _StandardFieldWithLabelWidgetState
               return;
             }
           }
-          widget.controller.text = pickedTime.format(context);
+          widget.endTimeController?.text = pickedTime.format(context);
         }
       });
-      if (!widget.isStartTime &&
-          _startTime != null &&
-          (pickedTime.hour < _startTime!.hour ||
-              (pickedTime.hour == _startTime!.hour &&
-                  pickedTime.minute < _startTime!.minute))) {
-        return;
-      }
 
       widget.onChanged?.call(widget.controller.text);
     }
@@ -280,65 +280,124 @@ class _StandardFieldWithLabelWidgetState
         );
         break;
       case TextFieldTypeEnum.time:
-        inputField = InputFieldWidget(
-          controller: widget.controller,
-          inputType: widget.inputType,
-          placeholder: widget.placeholder,
-          suffixIcon: 'assets/icons/time.png',
-          readOnly: true,
-          validator: widget.validator,
-          onChanged: widget.onChanged,
-          toggleObscure: () async {
-            await _selectTime(context);
-          },
+        inputField = Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: InputFieldWidget(
+                controller: widget.controller,
+                inputType: widget.inputType,
+                placeholder: widget.placeholder,
+                suffixIcon: 'assets/icons/time.png',
+                readOnly: true,
+                validator: widget.validator,
+                onChanged: widget.onChanged,
+                toggleObscure: () async {
+                  await _selectTime(context, isStartTime: true);
+                },
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(12),
+              child: Text('To'),
+            ),
+            Flexible(
+              child: InputFieldWidget(
+                controller: widget.endTimeController!,
+                inputType: widget.inputType,
+                placeholder: widget.placeholder,
+                suffixIcon: 'assets/icons/time.png',
+                readOnly: true,
+                validator: widget.validator,
+                onChanged: widget.onChanged,
+                toggleObscure: () async {
+                  await _selectTime(context, isStartTime: false);
+                },
+              ),
+            ),
+          ],
         );
         break;
       case TextFieldTypeEnum.file:
-        inputField = DropTarget(
-          onDragDone: (details) {
-            setState(() {
-              _pickedFiles = details.files
-                  .map((file) => PlatformFile(
-                        name: file.path.split('/').last,
-                        path: file.path,
-                        size: File(file.path).lengthSync(),
-                      ))
-                  .toList();
-              _fileErrorMessage = '';
-            });
-            _validateFilesSize();
-          },
-          child: DottedBorder(
-            borderType: BorderType.RRect,
-            dashPattern: const [4, 4],
-            radius: const Radius.circular(4),
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.file_upload_outlined, size: 30),
-                const SizedBox(height: 8),
-                const Text('Drag and drop files here or'),
-                TextButton(
-                  onPressed: _pickFiles,
-                  child: const Text('Choose files'),
-                ),
-                if (_fileErrorMessage.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      _fileErrorMessage,
-                      style: const TextStyle(color: Colors.red),
+        inputField = Column(
+          children: [
+            DropTarget(
+              onDragDone: (details) {
+                setState(() {
+                  _pickedFiles = details.files
+                      .map((file) => PlatformFile(
+                            name: file.path.split('/').last,
+                            path: file.path,
+                            size: File(file.path).lengthSync(),
+                          ))
+                      .toList();
+                  _fileErrorMessage = '';
+                });
+                _validateFilesSize();
+              },
+              child: DottedBorder(
+                borderType: BorderType.RRect,
+                dashPattern: const [4, 4],
+                radius: const Radius.circular(4),
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.file_upload_outlined, size: 30),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Drag and drop files here or',
+                          style: TextStyle(
+                            color: Color(blackTextColor),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: _pickFiles,
+                          child: const Text(
+                            'Choose files',
+                            style: TextStyle(
+                              color: Color(blueColor),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                if (_pickedFiles.isNotEmpty)
-                  Column(
-                    children:
-                        _pickedFiles.map((file) => Text(file.name)).toList(),
-                  ),
-              ],
+                    if (_fileErrorMessage.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          _fileErrorMessage,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    if (_pickedFiles.isNotEmpty)
+                      Column(
+                        children: _pickedFiles
+                            .map((file) => Text(file.name))
+                            .toList(),
+                      ),
+                  ],
+                ),
+              ),
             ),
-          ),
+            const SizedBox(height: 8),
+            Text(
+              widget.placeholder,
+              style: const TextStyle(
+                color: Color(darkerGreyColor),
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         );
         break;
       case TextFieldTypeEnum.dropdown:
@@ -418,6 +477,18 @@ class _StandardFieldWithLabelWidgetState
               ),
             ),
           ),
+        );
+        break;
+      case TextFieldTypeEnum.radio:
+        inputField = CustomRadioWidget(
+          options: widget.options!,
+          selectedOption: widget.controller.text,
+          onChanged: (value) {
+            setState(() {
+              widget.controller.text = value;
+            });
+            widget.onChanged?.call(value);
+          },
         );
         break;
     }
